@@ -1,0 +1,50 @@
+﻿@model BookSearchViewModel
+
+<div id="search-results-list-container">
+    <h3 style="margin-top:20px; margin-bottom:10px;">Categories</h3>
+    @if (Model.Categories.Any())
+    {
+        <ul style="list-style-type: none; padding-left: 0;">
+            @foreach (var category in Model.Categories)
+            {
+                <li style="margin-bottom:0px; margin-top:20px;"><a href="@Url.Action("Index", "Books", new { categoryId = category.CategoryID })"><i class="fa-solid fa-list"></i>@category.CategoryName</a></li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p style="margin-bottom:0px;">No categories found.</p>
+    }
+
+    <h3 style="margin-top:20px; margin-bottom:10px;">Books & Authors</h3>
+    @if (Model.Books.Any())
+    {
+        <ul style="list-style-type: none; padding-left: 0;">
+            @foreach (var book in Model.Books)
+            {
+                <li style="margin-bottom:0px; margin-top:20px;"> <a href="@Url.Action("Details", "Books", new { id = book.BookID })"><i class="fa-solid fa-book"></i>@book.Title - @book.Author</a></li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No books found.</p>
+    }
+</div>
+
+<style>
+    #search-results-list-container a {
+        text-decoration: none;
+        color: black;
+        font-size:18px;
+
+    }
+
+    #search-results-list-container a:hover {
+        text-decoration: underline;
+    }
+
+    .fa-solid {
+        margin-right: 10px;
+    }
+</style>

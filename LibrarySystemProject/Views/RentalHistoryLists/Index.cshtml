@@ -1,0 +1,34 @@
+﻿@model IEnumerable<LibrarySystemProject.Models.RentalTracking>
+
+@{
+    ViewBag.Title = "Rental History";
+}
+
+<h2>Rental History</h2>
+
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Book.Category.CategoryName)</th>
+        <th>@Html.DisplayNameFor(model => model.Book.Title)</th>
+        <th>@Html.DisplayNameFor(model => model.Book.Author)</th>
+        <th>@Html.DisplayNameFor(model => model.Book.ISBN)</th>
+        <th>@Html.DisplayNameFor(model => model.Book.PublicationYear)</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Book.Category.CategoryName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Book.Title)</td>
+            <td>@Html.DisplayFor(modelItem => item.Book.Author)</td>
+            <td>@Html.DisplayFor(modelItem => item.Book.ISBN)</td>
+            <td>@Html.DisplayFor(modelItem => item.Book.PublicationYear)</td>
+            <td>
+                @Html.ActionLink("Details", "Details", "RentalHistoryLists", new { id = item.BookID }, null)                
+            </td>
+        </tr>
+    }
+</table>
+<p>@Html.ActionLink("Go Back to Home", "Index", "Home")</p>

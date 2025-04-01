@@ -1,0 +1,89 @@
+﻿<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark" style="background-color: #e7dec8;">
+    <div class="container">
+        <a class="navbar-brand" href="@Url.Action("Index", "Home", new { area = "" })">
+            <img src="@Url.Content("~/Content/image/Readly1.png")" alt="Readly Logo" style="height: 90px;">
+        </a>
+        <style>
+            .navbar .nav-link {
+                color: black !important;
+                font-size: 1.2rem;
+            }
+        </style>
+
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item mx-3">@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                <li class="nav-item mx-3">@Html.ActionLink("About Readly", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                <li class="nav-item mx-3">@Html.ActionLink("Contact Us", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                @if (Session["Firstname"] != null)
+                {
+                    <li class="nav-item mx-3">@Html.ActionLink("Logout", "Logout", "Login", new { area = "" }, new { @class = "nav-link" })</li>
+                }
+                else
+                {
+                    <li class="nav-item mx-3">@Html.ActionLink("Login", "Index", "Login", new { area = "" }, new { @class = "nav-link" })</li>
+                }
+            </ul>
+            <div class="search-container">
+                <button type="button" id="load_partial" style="border-radius: 50%; background-color: white; padding: 10px 15px; border: 1px solid #ccc;">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+<div id="search-result-container" style="display:none; position:absolute;">
+    @Html.Partial("_SearchResult")
+</div>
+
+<style>
+    #search-result-container {
+        display: none;
+        position: fixed;
+        top: 117px;
+        width: 100%;
+        height: 100%;
+        background: white;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        z-index: 1000;
+        border-radius: 10px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        var isSearchOpen = false; // Flag to track search container state
+
+        $("#load_partial").click(function () {
+            if (!isSearchOpen) {
+                // Open the search result container
+                $("#search-result-container").fadeIn();
+                // Change the icon to 'close' (fa-times)
+                $(this).find("i").removeClass("fa-search").addClass("fa-times");
+                isSearchOpen = true;
+            } else {
+                // Close the search result container
+                $("#search-result-container").fadeOut();
+                // Change the icon back to 'search'
+                $(this).find("i").removeClass("fa-times").addClass("fa-search");
+                isSearchOpen = false;
+            }
+        });
+
+        // Close the search container when clicking outside of it
+        $(document).click(function (event) {
+            if (!$(event.target).closest("#search-result-container, #load_partial").length) {
+                if (isSearchOpen) {
+                    $("#search-result-container").fadeOut();
+                    $("#load_partial").find("i").removeClass("fa-times").addClass("fa-search");
+                    isSearchOpen = false;
+                }
+            }
+        });
+    });
+</script>

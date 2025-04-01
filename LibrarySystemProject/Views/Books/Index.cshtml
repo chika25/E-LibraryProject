@@ -1,0 +1,69 @@
+﻿@model IEnumerable<LibrarySystemProject.Models.Book>
+
+@{
+    ViewBag.Title = "Books";
+    int? categoryId = ViewBag.CategoryId as int?;
+}
+
+
+<h2>Index</h2>
+
+@if (Session["Firstname"] != null && Session["Firstname"].ToString() == "admin")
+{
+    <p>
+        @Html.ActionLink("Create New", "Create", new { categoryId = categoryId }, null)
+    </p>
+}
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Category.CategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ISBN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PublicationYear)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ISBN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublicationYear)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", "Books", new { id = item.BookID, categoryId = categoryId }, null) 
+
+                    @if (Session["Firstname"] != null && Session["Firstname"].ToString() == "admin")
+                    {
+                        @: | @Html.ActionLink("Edit", "Edit", new { id = item.BookID, categoryId = categoryId }, null)
+                        @: | @Html.ActionLink("Delete", "Delete", new { id = item.BookID, categoryId = categoryId }, null)
+                    }
+                </td>
+            </tr>
+
+}
+
+    </table>
+

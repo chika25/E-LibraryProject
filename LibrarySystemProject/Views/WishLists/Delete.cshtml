@@ -1,0 +1,65 @@
+﻿@model LibrarySystemProject.Models.WishListItem
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>WishList</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Book.Category.CategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Book.Category.CategoryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Book.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Book.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Book.Author)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Book.Author)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Book.ISBN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Book.ISBN)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Book.PublicationYear)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Book.PublicationYear)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm("Delete", "WishLists", new { id = Model.WishListItemID }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            @Html.ActionLink("Back to List", "Index", "WishLists",null)
+        </div>
+    }
+</div>

@@ -1,0 +1,186 @@
+﻿
+<div id="search-form" style="width:50%; margin:auto;">
+    <form style="display:flex;">
+        <label for="search-bar" style="width:100%;">
+            <input id="search-bar" placeholder="Search by keyword" style="border-radius: 6.188rem; border-bottom-right-radius: 0; border-top-right-radius: 0; border: 1px solid #ababab; border-right: none; max-width: 100% !important; width: 100%; padding: 10px 20px; ">
+        </label>
+        <button type="button" id="clear-button" style="border: 1px solid #ababab; background-color:white; border-bottom-right-radius: 6.188rem; border-left: 0; border-top-right-radius: 6.188rem; padding-right: 20px;">
+            <i class="fa fa-times"></i>
+        </button>
+    </form>
+</div>
+
+<div id="search-results" style="width:50%; margin:auto;">
+    <div id="loading" style="display: none; width: 50%; margin: auto; text-align: center;">
+        <img src="@Url.Content("~/Content/image/load.gif")" style="width:100px;" alt="Loading..." />
+    </div>
+</div>
+
+
+
+<script>
+$(document).ready(function () {
+    var autocompleteUrl = '@Url.Action("AutocompleteSearch", "Books")';
+
+    // Restore saved search input
+    if (localStorage.getItem("searchKeyword")) {
+        $("#search-bar").val(localStorage.getItem("searchKeyword")).trigger("input");
+    }
+
+    @*$("#search-bar").autocomplete({
+        source: function (request, response) {
+            var keyword = request.term.trim();
+            if (keyword.length < 1) return;
+
+            $("#loading").show();
+
+            $.ajax({
+                url: autocompleteUrl,
+                data: { keyword: keyword },
+                type: 'GET',
+                success: function (data) {
+                    let results = [];
+
+                    
+                    if (!Array.isArray(data)) {
+                        console.error("Unexpected response format:", data);
+                        response([]);
+                        return;
+                    }
+
+                    data.forEach(item => {
+
+                        console.log("Item received:", item);  // Log the received item
+                        console.log("Item ID:", item.ID);  // Log the ID before assignment
+                        if (item.Type === "Category") {
+                            results.push({
+                                label: item.Label,  
+                                value: item.Label,
+                                id: item.ID || null,  
+                                type: "Category",
+                                icon: "fa-list"  
+                            });
+                        } else if (item.Type === "Title") {
+                            results.push({
+                                label: item.Label, 
+                                value: item.Label,
+                                id: item.ID || null,  
+                                type: "Book",
+                                icon: "fa-book"  
+                            });
+                        }
+                    });
+
+                    response(results);
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX error:", error);
+                    response([]);
+                },
+                complete: function () {
+                    $("#loading").hide();
+                }
+            });
+        },
+        minLength: 1,
+        select: function (event, ui) {
+            if (ui.item.type === "Category") {
+                window.location.href = '@Url.Action("Index", "Books", new { categoryId = "__ID__" })'.replace('__ID__', ui.item.id);
+            } else if (ui.item.type === "Book") {
+                window.location.href = '@Url.Action("Details", "Books", new { id = "__ID__" })'.replace('__ID__', ui.item.id);
+            }
+        }
+    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+        return $("<li>")
+            .append(`
+                <a href="#" style="display: flex; align-items: center; padding: 10px; text-decoration: none; font-size:18px;">
+                    <i class="fa-solid ${item.icon}" style="margin-right: 10px;"></i> ${item.label}
+                </a>
+            `)
+            .appendTo(ul);
+    };*@
+
+    // Search input event listener
+    $("#search-bar").on("input", function () {
+        var keyword = $(this).val().trim();
+        localStorage.setItem("searchKeyword", keyword);
+            $("#loading").show();
+        if (keyword === "") {
+            $("#search-results").html("");
+            $(".ui-autocomplete").hide();
+        } else {
+            $("#loading").show();
+            $.ajax({
+                url: '@Url.Action("SearchBooks", "Books")',
+                data: { keyword: keyword },
+                type: 'GET',
+                success: function (response) {
+                    $("#search-results").html(response);
+                },
+                error: function () {
+                    alert("An error occurred while searching.");
+                },
+                complete: function () {
+                    $("#loading").hide();
+                }
+            });
+        }
+    });
+
+    // Clear search bar and results
+    $("#clear-button").on("click", function () {
+        $("#search-bar").val("");
+        $("#search-results").html("");
+        localStorage.removeItem("searchKeyword");
+        $(".ui-autocomplete").hide();
+    });
+});
+
+
+</script>
+
+
+<style>
+    .ui-autocomplete {
+        display:absolute!important;
+        position: absolute !important; 
+        z-index: 9999; 
+        width: auto; 
+        max-width: 90%;
+        margin:auto;
+        background-color: white;
+        border: 1px solid #ccc;
+        max-width: 400px;
+        z-index: 1000;
+        list-style-type: none;
+        padding: 10px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .ui-menu-item {
+        padding: 5px;
+        cursor: pointer;
+    }
+
+        .ui-menu-item a {
+            text-decoration: none;
+            color: black;
+            display: block;
+        }
+
+            .ui-menu-item a:hover {
+                text-decoration: underline;
+            }
+
+    .ui-autocomplete-category {
+        font-weight: bold;
+        padding: 10px;
+        background-color: #f0f0f0;
+        margin-top: 10px;
+    }
+
+    .fa-solid {
+        margin-right: 10px;
+    }
+
+</style>

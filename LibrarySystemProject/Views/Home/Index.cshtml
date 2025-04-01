@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "E-Library Service";
+}
+
+<main>
+    <section class="row" aria-labelledby="aspnetTitle">
+        @if (Session["Firstname"] != null)
+        {
+            <h2>Hello, @Session["Firstname"].</h2>
+        }
+        
+        <h1 id="title">Welcome to Readly</h1>
+        <p class="lead">Your one-stop solution for managing books, categories, and rental history.</p>
+    </section>
+
+    <div class="row">
+        <!-- ActionLink to Categories Index -->
+        <section class="col-md-3" aria-labelledby="categoriesTitle">
+            <h2 id="categoriesTitle">Categories</h2>
+            <p>Browse different categories of books.</p>
+            <p>@Html.ActionLink("View Categories", "Index", "Categories", null, new { @class = "btn btn-primary btn-md" })</p>
+        </section>
+
+        <!-- ActionLink to Books Index -->
+        <section class="col-md-3" aria-labelledby="booksTitle">
+            <h2 id="booksTitle">Books</h2>
+            <p>Explore the list of available books in the library.</p>
+            <p>@Html.ActionLink("View Books", "Index", "Books", null, new { @class = "btn btn-primary btn-md" })</p>
+        </section>
+
+
+        @if (Session["Firstname"] == null || Session["Firstname"].ToString() != "admin")
+        {
+            <!-- ActionLink to WishList Index -->
+            <section class="col-md-3" aria-labelledby="wishListTitle">
+                <h2 id="wishListTitle">Wishlist</h2>
+                <p>Manage your personal book wishlist.</p>
+                <p>@Html.ActionLink("View Wishlist", "Index", "WishLists", null, new { @class = "btn btn-primary btn-md" })</p>
+
+            </section>
+
+            <!-- ActionLink to RentalHistoryList Index -->
+            <section class="col-md-3" aria-labelledby="rentalHistoryTitle">
+                <h2 id="rentalHistoryTitle">Rental History</h2>
+                <p>View your rental history.</p>
+                <p>@Html.ActionLink("View Rental History", "Index", "RentalHistoryLists", new { userId = 1 }, new { @class = "btn btn-primary btn-md" })</p>
+            </section>
+        }
+        </div>
+</main>
