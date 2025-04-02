@@ -150,6 +150,7 @@
     <Compile Include="Models\WishList.cs" />
     <Compile Include="Models\WishListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\MyRoleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\LibraryDB.mdf" />

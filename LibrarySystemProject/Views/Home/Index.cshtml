@@ -29,7 +29,7 @@
         </section>
 
 
-        @if (Session["Firstname"] == null || Session["Firstname"].ToString() != "admin")
+        @if (! User.IsInRole("Admin"))
         {
             <!-- ActionLink to WishList Index -->
             <section class="col-md-3" aria-labelledby="wishListTitle">
