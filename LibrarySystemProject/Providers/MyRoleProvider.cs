@@ -24,7 +24,26 @@ namespace LibrarySystemProject.Providers
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
         {
-            // Implement logic to add users to roles
+            foreach (var username in usernames)
+            {
+                var user = db.Users.FirstOrDefault(u => u.FirstName.Equals(username, StringComparison.OrdinalIgnoreCase));
+                if (user != null && roleNames.Contains("Admin"))
+                {
+                    // Find the "Admin" role
+                    var adminRole = db.Roles.FirstOrDefault(r => r.Name == "Admin");
+                    if (adminRole != null)
+                    {
+                        // Check if the user is already in the "Admin" role
+                        var existingUserRole = db.UserRoles.FirstOrDefault(ur => ur.UserId == user.UserID && ur.RoleId == adminRole.RoleId);
+                        if (existingUserRole == null)
+                        {
+                            // Assign "Admin" role to the user
+                            db.UserRoles.Add(new UserRole { UserId = user.UserID, RoleId = adminRole.RoleId });
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
         }
 
         public override void CreateRole(string roleName)
@@ -40,14 +59,23 @@ namespace LibrarySystemProject.Providers
 
         public override string[] GetRolesForUser(string username)
         {
-            Console.WriteLine($"Checking roles for {username}");
+            var user = db.Users.FirstOrDefault(u => u.FirstName.Equals(username, StringComparison.OrdinalIgnoreCase));
 
-            // Fetch the user from the database
-            var user = db.Users.FirstOrDefault(u => u.FirstName.ToLower() == username.ToLower());
-
-            if (user != null && user.FirstName.ToLower().Contains("admin"))
+            if (user != null)
             {
-                return new string[] { "Admin" };
+                // Fetch roles assigned in the UserRoles table
+                var roles = db.UserRoles
+                    .Where(ur => ur.UserId == user.UserID)
+                    .Join(db.Roles, ur => ur.RoleId, r => r.RoleId, (ur, r) => r.Name)
+                    .ToList();
+
+                // Automatically assign "Admin" role if FirstName contains "admin"
+                if (user.FirstName.ToLower().Contains("admin") && !roles.Contains("Admin"))
+                {
+                    roles.Add("Admin");
+                }
+
+                return roles.ToArray();
             }
 
             return new string[0];
@@ -61,7 +89,25 @@ namespace LibrarySystemProject.Providers
 
         public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
         {
-            // Implement logic to remove users from roles
+            foreach (var username in usernames)
+            {
+                var user = db.Users.FirstOrDefault(u => u.FirstName.Equals(username, StringComparison.OrdinalIgnoreCase));
+                if (user != null && roleNames.Contains("Admin"))
+                {
+                    // Find the "Admin" role
+                    var adminRole = db.Roles.FirstOrDefault(r => r.Name == "Admin");
+                    if (adminRole != null)
+                    {
+                        // Find and remove the "Admin" role for the user
+                        var userRole = db.UserRoles.FirstOrDefault(ur => ur.UserId == user.UserID && ur.RoleId == adminRole.RoleId);
+                        if (userRole != null)
+                        {
+                            db.UserRoles.Remove(userRole);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
         }
 
         public override string[] GetUsersInRole(string roleName)

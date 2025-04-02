@@ -20,6 +20,11 @@
                 <li class="nav-item mx-3">@Html.ActionLink("Books", "Index", "Books", null, new { @class = "nav-link" })</li>
                 <li class="nav-item mx-3">@Html.ActionLink("About Readly", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                 <li class="nav-item mx-3">@Html.ActionLink("Contact Us", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                @if (User.IsInRole("Admin"))
+                { 
+                    <li class="nav-item mx-3">@Html.ActionLink("Admin Panel", "Index", "AdminPanel", new { area = "" }, new { @class = "nav-link" })</li>
+                }
+
                 @if (Session["Firstname"] != null)
                 {
                     <li class="nav-item mx-3">@Html.ActionLink("Logout", "Logout", "Login", new { area = "" }, new { @class = "nav-link" })</li>
@@ -28,7 +33,7 @@
                 {
                     <li class="nav-item mx-3">@Html.ActionLink("Login", "Index", "Login", new { area = "" }, new { @class = "nav-link" })</li>
                 }
-            </ul>
+                </ul>
             <div class="search-container">
                 <button type="button" id="load_partial" style="border-radius: 50%; background-color: white; padding: 10px 15px; border: 1px solid #ccc;">
                     <i class="fa fa-search"></i>

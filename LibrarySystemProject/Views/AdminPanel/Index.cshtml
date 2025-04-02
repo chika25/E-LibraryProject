@@ -1,0 +1,123 @@
+﻿@model IEnumerable<LibrarySystemProject.Models.User>
+
+@{
+    ViewBag.Title = "Admin Panel";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Admin Panel</title>
+</head>
+<body>
+    
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+
+
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <button class="toggle-role-btn" data-user-id="@item.UserID">
+                        Loading...
+                    </button>
+                </td>
+            </tr>
+        }
+
+    </table>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        $(".toggle-role-btn").each(function () {
+            var button = $(this);
+            var userId = button.data("user-id");
+
+            // Make an AJAX call to check if the user has the Admin role
+            $.ajax({
+                url: '@Url.Action("CheckUserAdminRole", "AdminPanel")',
+                type: 'POST',
+                data: { userId: userId },
+                success: function (response) {
+                    if (response.success) {
+                        if (response.isAdmin) {
+                            button.text("Remove Admin Role");
+                            button.css("background-color", "red");  // Red background for 'Remove Admin Role'
+                        } else {
+                            button.text("Add Admin Role");
+                            button.css("background-color", "blue");  // Blue background for 'Add Admin Role'
+                        }
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while processing your request.");
+                }
+            });
+        });
+
+        $(".toggle-role-btn").click(function () {
+            var button = $(this);
+            var userId = button.data("user-id");
+            var action = button.text().includes("Add") ? "Add" : "Remove"; // Determine action based on button text
+
+            $.ajax({
+                url: '@Url.Action("ToggleAdminRole", "AdminPanel")',
+                type: 'POST',
+                data: { userId: userId, action: action },
+                success: function (response) {
+                    if (response.success) {
+                        if (action === "Add") {
+                            button.text("Remove Admin Role");
+                            button.css("background-color", "red");  // Red background for 'Remove Admin Role'
+                        } else {
+                            button.text("Add Admin Role");
+                            button.css("background-color", "blue");  // Blue background for 'Add Admin Role'
+                        }
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while processing your request.");
+                }
+            });
+        });
+    });
+</script>
+
+
+
+<style>
+    button.toggle-role-btn {
+        width: 200px;
+        border-radius: 10px;
+        color: white;
+    }
+</style>

@@ -17,6 +17,8 @@ namespace LibrarySystemProject.Models
         public DbSet<RentalTracking> RentalTracking { get; set; }
         public DbSet<WishList> WishList { get; set; }
         public DbSet<WishListItem> WishListItem { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

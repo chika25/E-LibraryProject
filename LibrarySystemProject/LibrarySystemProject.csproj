@@ -127,6 +127,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminPanelController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -146,7 +147,9 @@
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\RentalHistoryList.cs" />
     <Compile Include="Models\RentalTracking.cs" />
+    <Compile Include="Models\Role.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserRole.cs" />
     <Compile Include="Models\WishList.cs" />
     <Compile Include="Models\WishListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -286,6 +289,7 @@
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
     <Content Include="Views\Shared\_SearchResult.cshtml" />
     <Content Include="Views\Shared\_SearchResultList.cshtml" />
+    <Content Include="Views\AdminPanel\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\RentalTracking\" />
