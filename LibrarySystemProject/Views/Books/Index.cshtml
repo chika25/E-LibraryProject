@@ -53,14 +53,29 @@
                     @Html.DisplayFor(modelItem => item.PublicationYear)
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", "Books", new { id = item.BookID, categoryId = categoryId }, null) 
-
-                    @if (User.IsInRole("Admin"))
+                    @Html.ActionLink("Details", "Details", "Books", new { id = item.BookID, categoryId = categoryId }, null)
+                    @if (!User.IsInRole("Admin") && Session["Firstname"] != null)
                     {
-                        @: | @Html.ActionLink("Edit", "Edit", new { id = item.BookID, categoryId = categoryId }, null)
-                        @: | @Html.ActionLink("Delete", "Delete", new { id = item.BookID, categoryId = categoryId }, null)
+                        if (ViewBag.WishListBookIds != null && ViewBag.WishListBookIds.Contains(item.BookID))
+                        {
+                            <p><strong>Already in Wishlist</strong></p> <!-- Show a message instead of the button -->
+                        }
+                        else
+                        {
+                            using (Html.BeginForm("Create", "WishLists", FormMethod.Post, new { @class = "form-inline" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("BookID", item.BookID) <!-- Pass BookID through a hidden field -->
+                                <button type="submit" class="btn btn-primary">Add to Wishlist</button>
+                            }
+                        }
                     }
-                </td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            @: | @Html.ActionLink("Edit", "Edit", new { id = item.BookID, categoryId = categoryId }, null)
+                            @: | @Html.ActionLink("Delete", "Delete", new { id = item.BookID, categoryId = categoryId }, null)
+                        }
+                    </td>
             </tr>
 
 }

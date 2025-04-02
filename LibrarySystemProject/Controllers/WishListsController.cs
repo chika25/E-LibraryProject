@@ -57,11 +57,30 @@ namespace LibrarySystemProject.Controllers
         // GET: WishLists/Create
         public ActionResult Create()
         {
-            // Get the list of books from the database
-            var books = db.Books.Select(b => new { b.BookID, b.Title }).ToList();
+            
 
-            // Pass the list of books to the view
-            ViewBag.Books = new SelectList(books, "BookID", "Title");
+            int userId = (int)Session["UserID"];
+            
+
+            // Get the user's wishlist items
+            var userWishList = db.WishList.FirstOrDefault(w => w.UserID == userId);
+            var wishlistBookIds = new List<int>();
+
+            if (userWishList != null)
+            {
+                wishlistBookIds = db.WishListItem
+                    .Where(wi => wi.WishListID == userWishList.WishListID)
+                    .Select(wi => wi.BookID)
+                    .ToList();
+            }
+
+            // Get books that are NOT in the user's wishlist
+            var availableBooks = db.Books
+                .Where(b => !wishlistBookIds.Contains(b.BookID))
+                .Select(b => new { b.BookID, b.Title })
+                .ToList();
+
+            ViewBag.Books = new SelectList(availableBooks, "BookID", "Title");
 
             return View();
         }

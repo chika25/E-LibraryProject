@@ -29,6 +29,29 @@ namespace LibrarySystemProject.Controllers
             }
 
             ViewBag.CategoryId = categoryId; // Pass categoryId to the view
+
+            //pass wishlistsid
+            if (Session["UserID"] != null)
+            {
+                int userId = (int)Session["UserID"];
+                var userWishList = db.WishList.FirstOrDefault(w => w.UserID == userId);
+
+                List<int> wishListBookIds = new List<int>(); // List of BookIDs in wishlist
+
+                if (userWishList != null)
+                {
+                    wishListBookIds = db.WishListItem
+                        .Where(w => w.WishListID == userWishList.WishListID)
+                        .Select(w => w.BookID)
+                        .ToList();
+                }
+
+                ViewBag.WishListBookIds = wishListBookIds;
+            }
+
+
+
+
             return View(books);
         }
 
