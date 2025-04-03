@@ -41,6 +41,10 @@
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.UserID }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.UserID }, new { @class = "btn btn-danger" })
+                </td>
+                <td>
                     <button class="toggle-role-btn" data-user-id="@item.UserID">
                         Loading...
                     </button>

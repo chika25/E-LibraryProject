@@ -290,6 +290,8 @@
     <Content Include="Views\Shared\_SearchResult.cshtml" />
     <Content Include="Views\Shared\_SearchResultList.cshtml" />
     <Content Include="Views\AdminPanel\Index.cshtml" />
+    <Content Include="Views\AdminPanel\Edit.cshtml" />
+    <Content Include="Views\AdminPanel\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\RentalTracking\" />

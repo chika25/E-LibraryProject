@@ -71,6 +71,58 @@ namespace LibrarySystemProject.Controllers
             
         }
 
+        // GET: AdminPanel/Edit/5
+        public ActionResult Edit(int id)
+        {
+            var user = db.Users.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);  // This view should display a form with the user's current data.
+        }
+
+        // POST: AdminPanel/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(User updatedUser)
+        {
+            if (ModelState.IsValid)
+            {
+                // Optionally, you can load the existing user from the database and update specific fields.
+                db.Entry(updatedUser).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(updatedUser);
+        }
+
+        // GET: AdminPanel/Delete/5
+        public ActionResult Delete(int id)
+        {
+            var user = db.Users.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);  // This view should ask for confirmation before deletion.
+        }
+
+        // POST: AdminPanel/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var user = db.Users.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            db.Users.Remove(user);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
     }
 
 }
