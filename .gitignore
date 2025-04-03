@@ -53,3 +53,6 @@ Thumbs.db
 # Optional: Ignore local settings/secrets
 appsettings.Development.json
 secrets.json
+
+# Ignore cache files
+*.cache
