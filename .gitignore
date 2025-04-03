@@ -1,7 +1,55 @@
-# Ignore Visual Studio files
-.vs/
-.vscode/
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# User-specific files
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
+
+# Visual Studio Code workspace
+.vscode/
+
+# Web publish
+*.Publish.xml
+*.pubxml
+*.publishproj
+
+# ASP.NET / IIS Express
+.vs/
+*.dbmdl
+*.mdf
+*.ldf
+App_Data/*.mdf
+App_Data/*.ldf
+
+# NuGet
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Entity Framework
+*.vsscc
+*.dbmdl
+
+# Logs and temporary files
+*.log
+*.tlog
+*.tmp
+
+# Others
+_ReSharper*/
+*.DotSettings.user
+.idea/
+*.bak
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Optional: Ignore local settings/secrets
+appsettings.Development.json
+secrets.json
