@@ -15,7 +15,6 @@ namespace LibrarySystemProject.Controllers
         private LibraryContext db = new LibraryContext();
 
         // GET: RentalHistoryLists
-
         public ActionResult Index()
         {
             if (Session["UserID"] == null)
@@ -26,13 +25,11 @@ namespace LibrarySystemProject.Controllers
             int userId = (int)Session["UserID"];
 
             var rentedBooks = db.RentalTracking
-                                .Where(r => r.RentalHistory.UserID == userId)
+                                .Where(r => r.UserID == userId)
                                 .Include(r => r.Book) // Load Book details
                                 .ToList();
 
             return View(rentedBooks);
-
-         
         }
 
         // GET: RentalHistoryLists/Details/5

@@ -6,6 +6,12 @@
 
 <h2>Details</h2>
 
+@if (TempData["Message"] != null)
+{
+    <div style="padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; margin-bottom: 15px;">
+        @TempData["Message"]
+    </div>
+}
 <div>
     <h4>Book</h4>
     <hr />
@@ -51,6 +57,18 @@
         </dd>
 
     </dl>
+    @if (Session["UserID"] != null)
+    {
+        <div style="margin-top: 20px;">
+            <h4>Actions</h4>
+            @using (Html.BeginForm("RentBook", "RentalTracking", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("bookId", Model.BookID)
+                <button type="submit" class="btn btn-primary">Rent this Book</button>
+            }
+        </div>
+    }
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.BookID, categoryId = ViewBag.CategoryId }, null) |

@@ -1,24 +1,31 @@
-﻿<footer class="py-3">
-    <div class="container text-center">
+﻿<footer class="py-4 bg-light border-top">
+    <div class="container">
+        <div class="row text-center text-md-start">
+            <div class="col-md-4 mb-3">
+                <p><a href="@Url.Action("About", "Home")" class="footer-link">About Readly</a></p>
+                <p>
+                    <a href="@Url.Action("Terms", "Home")" class="footer-link">Terms & Conditions</a> |
+                    <a href="@Url.Action("Privacy", "Home")" class="footer-link">Privacy Policy</a>
+                </p>
+                <p>
+                    <a href="@Url.Action("Contact", "Home")" class="footer-link">Contact Us</a> |
+                    <a href="@Url.Action("Donate", "Home")" class="footer-link">Donate Us</a>
+                </p>
+            </div>
 
-        <p>
-            <a href="@Url.Action("About", "Home")" style="color: black; text-decoration: none;">About Readly</a>
-        </p>
-        <p>
-            <a href="@Url.Action("Terms", "Home")" style="color: black; text-decoration: none;">Terms & Conditions</a> |
-            <a href="@Url.Action("Privacy", "Home")" style="color: black; text-decoration: none;">Privacy Policy</a>
-        </p>
-        <p>
-            <a href="@Url.Action("Contact", "Home")" style="color: black; text-decoration: none;">Contact Us</a> |
-            <a href="@Url.Action("Donate", "Home")" style="color: black; text-decoration: none;">Donate Us</a>
-        </p>
-        <p>
-            <span>Connect with Readly: </span>
-            <a><img src="@Url.Content("~/Content/image/facebook.png")" alt="Facebook Image"></a>
-            <a><img src="@Url.Content("~/Content/image/instagram.png")" alt="Instagram Image"></a>
-            <a><img src="@Url.Content("~/Content/image/linkedin.png")" alt="Linkedin image"></a>
-            <a><img src="@Url.Content("~/Content/image/x.png")" alt="x Image"></a>
-        </p>
-        <p>© @DateTime.Now.Year Readly. All Rights Reserved.</p>
+            <div class="col-md-4 mb-3 d-flex align-items-center justify-content-center">
+                <p class="mb-0">© @DateTime.Now.Year Readly. All Rights Reserved.</p>
+            </div>
+
+            <div class="col-md-4 mb-3 text-md-end text-center">
+                <p>Connect with Readly:</p>
+                <div class="d-inline-flex gap-2">
+                    <a><img src="@Url.Content("~/Content/image/facebook.png")" alt="Facebook" style="width: 24px;"></a>
+                    <a><img src="@Url.Content("~/Content/image/instagram.png")" alt="Instagram" style="width: 24px;"></a>
+                    <a><img src="@Url.Content("~/Content/image/linkedin.png")" alt="LinkedIn" style="width: 24px;"></a>
+                    <a><img src="@Url.Content("~/Content/image/x.png")" alt="X" style="width: 24px;"></a>
+                </div>
+            </div>
+        </div>
     </div>
 </footer>
