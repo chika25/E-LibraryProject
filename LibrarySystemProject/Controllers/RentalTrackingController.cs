@@ -46,8 +46,8 @@ namespace LibrarySystemProject.Controllers
             db.SaveChanges();
 
             TempData["Message"] = "Book rented successfully!";
-            //return RedirectToAction("Details", "Books", new { id = bookId });
-            return RedirectToAction("Index", "RentalHistoryLists");
+            return RedirectToAction("Details", "Books", new { id = bookId });
+            //return RedirectToAction("Index", "RentalHistoryLists");
         }
 
         [HttpPost]
