@@ -156,6 +156,17 @@ namespace LibrarySystemProject.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Category category = db.Categories.Find(id);
+            var existingCategory = db.Categories.AsNoTracking().FirstOrDefault(c => c.CategoryID == category.CategoryID);
+
+            // Delete the old file if it exists
+            if (!string.IsNullOrEmpty(existingCategory.Photo))
+            {
+                var fullPath = Request.MapPath("~/Images/" + existingCategory.Photo);
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+            }
             db.Categories.Remove(category);
             db.SaveChanges();
             return RedirectToAction("Index");

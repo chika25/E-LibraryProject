@@ -5,54 +5,41 @@
     int? categoryId = ViewBag.CategoryId as int?;
 }
 
-
-<h2>Index</h2>
-
+@if (TempData["Message"] != null)
+{
+    <div style="padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; margin-bottom: 15px;">
+        @TempData["Message"]
+    </div>
+}
 @if (User.IsInRole("Admin"))
 {
     <p>
         @Html.ActionLink("Create New", "Create", new { categoryId = categoryId }, null)
     </p>
 }
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Category.CategoryName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ISBN)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PublicationYear)
-            </th>
-            <th></th>
-        </tr>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
-                </td>
-                <td>
+<div id="container">
+
+    @foreach (var item in Model)
+    {
+        <div class="category-container">
+            @if (!string.IsNullOrEmpty(item.Photo))
+            {
+                <img src="~/Images/@item.Photo" alt="Book Photo" style="max-height: 100px;" class="category-photo" />
+            }
+            <div class="category-info">
+                <h3>
                     @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
+                    |
                     @Html.DisplayFor(modelItem => item.Author)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ISBN)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PublicationYear)
-                </td>
-                <td>
+                </h3>
+                <h5>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </h5>
+
+
+
+                <div class="category-actions">
                     @Html.ActionLink("Details", "Details", "Books", new { id = item.BookID, categoryId = categoryId }, null)
                     @if (!User.IsInRole("Admin") && Session["Firstname"] != null)
                     {
@@ -70,15 +57,78 @@
                             }
                         }
                     }
-                        @if (User.IsInRole("Admin"))
-                        {
-                            @: | @Html.ActionLink("Edit", "Edit", new { id = item.BookID, categoryId = categoryId }, null)
-                            @: | @Html.ActionLink("Delete", "Delete", new { id = item.BookID, categoryId = categoryId }, null)
-                        }
-                    </td>
-            </tr>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @: | @Html.ActionLink("Edit", "Edit", new { id = item.BookID, categoryId = categoryId }, null)
+                        @: | @Html.ActionLink("Delete", "Delete", new { id = item.BookID, categoryId = categoryId }, null)
+                    }
+                </div>
 
-}
+            </div>
 
-    </table>
 
+        </div>
+    }
+</div>
+
+
+<style>
+    /* Container styles */
+    #container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    /* Category container styling */
+    .category-container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 30%;
+        text-align: center;
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        /* Hover effect for category container */
+        .category-container:hover {
+            transform: translateY(-5px); /* Slight lift effect */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Image styling */
+    .category-photo {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        max-height: 150px; /* Adjust based on your design */
+        object-fit: cover;
+        margin-bottom: 15px;
+    }
+
+    /* Category info (links and text) */
+    .category-info h3 {
+        font-size: 1.2em;
+        font-weight: bold;
+        text-decoration: none;
+        color: black;
+        margin-bottom: 10px;
+    }
+
+    .category-actions {
+        font-size: 0.9em;
+        color: black;
+    }
+
+        .category-actions a, .category-info h3 a, #create a {
+            text-decoration: none;
+            color: black;
+        }
+
+            .category-actions a:hover, .category-info h3 a:hover, #create a:hover {
+                text-decoration: underline;
+            }
+</style>

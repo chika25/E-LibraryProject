@@ -12,73 +12,100 @@
         @TempData["Message"]
     </div>
 }
-<div>
-    <h4>Book</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Category.CategoryName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Category.CategoryName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Author)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ISBN)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ISBN)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PublicationYear)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PublicationYear)
-        </dd>
-
-    </dl>
-    @if (Session["UserID"] != null)
-    {
-        <div style="margin-top: 20px;">
-            <h4>Actions</h4>
-            @using (Html.BeginForm("RentBook", "RentalTracking", FormMethod.Post))
+<div class="container mt-4">
+    <div class="card shadow-sm rounded">
+        <div class="row g-0">
+            @if (!string.IsNullOrEmpty(Model.Photo))
             {
-                @Html.AntiForgeryToken()
-                @Html.Hidden("bookId", Model.BookID)
-                <button type="submit" class="btn btn-primary">Rent this Book</button>
+                <div class="col-md-4 text-center p-3">
+                    <img src="~/Images/@Model.Photo" alt="Book Photo" class="img-fluid rounded" style="max-height: 200px;" />
+                </div>
+            }
+
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3 class="card-title mb-3">@Model.Title</h3>
+                    <h5 class="text-muted mb-3">@Model.Author</h5>
+
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item">
+                            <strong>Category:</strong> @Model.Category.CategoryName
+                        </li>
+                        <li class="list-group-item">
+                            <strong>ISBN:</strong> @Model.ISBN
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Published:</strong> @Model.PublicationYear
+                        </li>
+                    </ul>
+
+                    <div id="buttons">
+                        @if (!User.IsInRole("Admin") && Session["Firstname"] != null)
+                        {
+                            using (Html.BeginForm("RentBook", "RentalTracking", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("bookId", Model.BookID)
+                                <button type="submit" class="btn btn-primary">📖 Rent this Book</button>
+                            }
+                        }
+
+                        @if (!User.IsInRole("Admin") && Session["Firstname"] != null)
+                        {
+                            if (ViewBag.WishListBookIds != null && ViewBag.WishListBookIds.Contains(Model.BookID))
+                            {
+                                <p><strong>Already in Wishlist</strong></p> <!-- Show a message instead of the button -->
+                            }
+                            else
+                            {
+                                using (Html.BeginForm("Create", "WishLists", FormMethod.Post, new { @class = "form-inline" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("BookID", Model.BookID) <!-- Pass BookID through a hidden field -->
+                                    <button type="submit" class="btn btn-primary">Add to Wishlist</button>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex justify-content-between align-items-center">
+        <div>
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = Model.BookID, categoryId = ViewBag.CategoryId }, new { @class = "btn btn-outline-secondary me-2" })
             }
         </div>
-    }
+        <div>
+            @if (ViewBag.CategoryId != null)
+            {
+                @Html.ActionLink("Back to List", "Index", "Books", new { categoryId = ViewBag.CategoryId }, new { @class = "btn btn-link" })
+            }
+            else
+            {
+                @Html.ActionLink("Back to List", "Index", "Books", null, new { @class = "btn btn-link" })
+            }
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.BookID, categoryId = ViewBag.CategoryId }, null) |
-    @if (ViewBag.CategoryId != null)
-    {
-        @Html.ActionLink("Back to List", "Index", "Books", new { categoryId = ViewBag.CategoryId }, null)
-    }
-    else
-    {
-        @Html.ActionLink("Back to List", "Index", "Books")
+
+
+<style>
+    .card-title {
+        font-weight: 600;
     }
 
-</p>
+    .list-group-item strong {
+        width: 100px;
+        display: inline-block;
+    }
+    div#buttons {
+        display: flex;
+        justify-content: flex-start;
+        gap: 20px;
+        align-items: baseline;
+    }
+</style>

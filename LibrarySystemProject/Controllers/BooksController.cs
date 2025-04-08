@@ -123,6 +123,25 @@ namespace LibrarySystemProject.Controllers
             {
                 return HttpNotFound();
             }
+
+            //pass wishlistsid
+            if (Session["UserID"] != null)
+            {
+                int userId = (int)Session["UserID"];
+                var userWishList = db.WishList.FirstOrDefault(w => w.UserID == userId);
+
+                List<int> wishListBookIds = new List<int>(); // List of BookIDs in wishlist
+
+                if (userWishList != null)
+                {
+                    wishListBookIds = db.WishListItem
+                        .Where(w => w.WishListID == userWishList.WishListID)
+                        .Select(w => w.BookID)
+                        .ToList();
+                }
+
+                ViewBag.WishListBookIds = wishListBookIds;
+            }
             // Store the category ID for use in the view
             ViewBag.CategoryId = categoryId; 
             return View(book);
@@ -301,6 +320,17 @@ namespace LibrarySystemProject.Controllers
         public ActionResult DeleteConfirmed(int id, int? categoryId)
         {
             Book book = db.Books.Find(id);
+            var existingBook = db.Books.AsNoTracking().FirstOrDefault(b => b.BookID == book.BookID);
+
+            // Delete the old file if it exists
+            if (!string.IsNullOrEmpty(existingBook.Photo))
+            {
+                var fullPath = Request.MapPath("~/Images/" + existingBook.Photo);
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+            }
             db.Books.Remove(book);
             db.SaveChanges();
 

@@ -27,10 +27,10 @@
                 
 
             <div class="category-actions">
-                @Html.ActionLink("Details", "Details", new { id = item.CategoryID })
+                @*@Html.ActionLink("Details", "Details", new { id = item.CategoryID })*@
                 @if (User.IsInRole("Admin"))
                 {
-                    @: | @Html.ActionLink("Edit", "Edit", new { id = item.CategoryID })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.CategoryID })
                     @: | @Html.ActionLink("Delete", "Delete", new { id = item.CategoryID })
                 }
             </div>
@@ -47,8 +47,8 @@
     #container {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 20px; 
+        justify-content: flex-start;
+        gap: 20px;
         padding: 20px;
     }
 
