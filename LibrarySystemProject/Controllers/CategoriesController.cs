@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -46,12 +47,24 @@ namespace LibrarySystemProject.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CategoryID,CategoryName")] Category category)
+        public ActionResult Create(HttpPostedFileBase file,Category category)
         {
             if (ModelState.IsValid)
             {
+                var filename = Path.GetFileName(file.FileName);
+                category.Photo = filename;
                 db.Categories.Add(category);
+                
+                var imagesPath = Server.MapPath("~/Images/");
+                if (!Directory.Exists(imagesPath))
+                {
+
+                    Directory.CreateDirectory(imagesPath); // Create if not exists
+                }
+                var path = Path.Combine(Server.MapPath("~/Images/"), filename);
+                file.SaveAs(path);
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
@@ -78,10 +91,43 @@ namespace LibrarySystemProject.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CategoryID,CategoryName")] Category category)
+        public ActionResult Edit(HttpPostedFileBase file, Category category)
         {
             if (ModelState.IsValid)
             {
+                var existingCategory = db.Categories.AsNoTracking().FirstOrDefault(b => b.CategoryID == category.CategoryID);
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    // Delete the old file if it exists
+                    if (!string.IsNullOrEmpty(existingCategory.Photo))
+                    {
+                        var oldPath = Path.Combine(Server.MapPath("~/Images/"), existingCategory.Photo);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    }
+
+                    var imagesPath = Server.MapPath("~/Images/");
+                    if (!Directory.Exists(imagesPath))
+                    {
+                        Directory.CreateDirectory(imagesPath); // Create if not exists
+                    }
+
+                    // Save new file
+                    var fileName = Path.GetFileName(file.FileName);
+                    var newPath = Path.Combine(Server.MapPath("~/Images/"), fileName);
+                    file.SaveAs(newPath);
+
+                    // Step 4: Update photo path in the book object
+                    category.Photo = fileName;
+                }
+                else
+                {
+                    // If no new file uploaded, keep the existing photo
+                    category.Photo = existingCategory.Photo;
+                }
                 db.Entry(category).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

@@ -32,6 +32,9 @@ namespace LibrarySystemProject.Models
         [Required]
         public int CategoryID { get; set; } // Foreign Key to Category
 
+       
+        public string Photo { get; set; }
+
         // Foreign Key Relationship
         [ForeignKey("CategoryID")]
         public virtual Category Category { get; set; } // Navigation property for Category
