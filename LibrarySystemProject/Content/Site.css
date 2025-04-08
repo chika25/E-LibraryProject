@@ -94,3 +94,29 @@ html, body {
     transform: scale(1.03);
 }
 
+.card {
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+.btn-primary {
+    background-color: #0069d9;
+    border: none;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+.form-control {
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 15px;
+    box-shadow: none;
+    transition: border 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
