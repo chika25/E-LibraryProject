@@ -1,11 +1,16 @@
-﻿@model LibrarySystemProject.Models.WishListItem 
+﻿@model LibrarySystemProject.Models.WishListItem
 
 @{
     ViewBag.Title = "Create";
 }
 
 <h2>Create</h2>
-
+@if (TempData["Message"] != null)
+{
+    <div style="padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; margin-bottom: 15px;">
+        @TempData["Message"]
+    </div>
+}
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -25,7 +30,7 @@
             </div>
         </div>
 
-        
+
 
         <!-- Submit button -->
         <div class="form-group">

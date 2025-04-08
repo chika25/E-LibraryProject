@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -122,6 +123,25 @@ namespace LibrarySystemProject.Controllers
             {
                 return HttpNotFound();
             }
+
+            //pass wishlistsid
+            if (Session["UserID"] != null)
+            {
+                int userId = (int)Session["UserID"];
+                var userWishList = db.WishList.FirstOrDefault(w => w.UserID == userId);
+
+                List<int> wishListBookIds = new List<int>(); // List of BookIDs in wishlist
+
+                if (userWishList != null)
+                {
+                    wishListBookIds = db.WishListItem
+                        .Where(w => w.WishListID == userWishList.WishListID)
+                        .Select(w => w.BookID)
+                        .ToList();
+                }
+
+                ViewBag.WishListBookIds = wishListBookIds;
+            }
             // Store the category ID for use in the view
             ViewBag.CategoryId = categoryId; 
             return View(book);
@@ -143,11 +163,24 @@ namespace LibrarySystemProject.Controllers
         // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "BookID,Title,Author,ISBN,PublicationYear,CategoryID")] Book book, int? categoryId)
+        public ActionResult Create(HttpPostedFileBase file, Book book, int? categoryId)
         {
+           
             if (ModelState.IsValid)
             {
+                var filename = Path.GetFileName(file.FileName);
+                book.Photo = filename;
                 db.Books.Add(book);
+
+                var imagesPath = Server.MapPath("~/Images/");
+                if (!Directory.Exists(imagesPath))
+                {
+
+                    Directory.CreateDirectory(imagesPath); // Create if not exists
+                }
+
+                var path = Path.Combine(Server.MapPath("~/Images/"), filename);
+                file.SaveAs(path);
                 db.SaveChanges();
                 if (categoryId.HasValue)
                 {
@@ -193,13 +226,49 @@ namespace LibrarySystemProject.Controllers
         // POST: Books/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "BookID,Title,Author,ISBN,PublicationYear,CategoryID")] Book book, int? categoryId)
+        public ActionResult Edit(HttpPostedFileBase file, Book book, int? categoryId)
         {
+            
             if (ModelState.IsValid)
             {
+                var existingBook = db.Books.AsNoTracking().FirstOrDefault(b => b.BookID == book.BookID);
+
+                Console.WriteLine("file" + file);
+                if (file != null && file.ContentLength > 0)
+                {
+                    // Delete the old file if it exists
+                    if (!string.IsNullOrEmpty(existingBook.Photo))
+                    {
+                        var oldPath = Path.Combine(Server.MapPath("~/Images/"), existingBook.Photo);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    }
+                    var imagesPath = Server.MapPath("~/Images/");
+                    if (!Directory.Exists(imagesPath))
+                    {
+                   
+                        Directory.CreateDirectory(imagesPath); // Create if not exists
+                    }
+                   
+
+                    // Save new file
+                    var fileName = Path.GetFileName(file.FileName);
+                    var newPath = Path.Combine(Server.MapPath("~/Images/"), fileName);
+                    Console.WriteLine(newPath);
+                    file.SaveAs(newPath);
+
+                    // Step 4: Update photo path in the book object
+                    book.Photo = fileName;
+                }
+                else
+                {
+                    // If no new file uploaded, keep the existing photo
+                    book.Photo = existingBook.Photo;
+                }
                 db.Entry(book).State = EntityState.Modified;
                 db.SaveChanges();
-
                 if (categoryId.HasValue)
                 {
                     // If categoryId is provided, redirect to the category-specific list
@@ -251,6 +320,17 @@ namespace LibrarySystemProject.Controllers
         public ActionResult DeleteConfirmed(int id, int? categoryId)
         {
             Book book = db.Books.Find(id);
+            var existingBook = db.Books.AsNoTracking().FirstOrDefault(b => b.BookID == book.BookID);
+
+            // Delete the old file if it exists
+            if (!string.IsNullOrEmpty(existingBook.Photo))
+            {
+                var fullPath = Request.MapPath("~/Images/" + existingBook.Photo);
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+            }
             db.Books.Remove(book);
             db.SaveChanges();
 

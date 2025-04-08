@@ -18,6 +18,11 @@ namespace LibrarySystemProject.Models
         [MaxLength(100)]
         [Index(IsUnique = true)] // Ensures CategoryName is unique
         public string CategoryName { get; set; } // Name of the Category
+
+        
+        public string Photo { get; set; }
+
+    
         public List<Book> Books { get; set; }
     }
 }

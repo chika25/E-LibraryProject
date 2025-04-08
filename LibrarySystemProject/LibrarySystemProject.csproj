@@ -294,6 +294,7 @@
     <Content Include="Views\AdminPanel\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Images\" />
     <Folder Include="Views\RentalTracking\" />
     <Folder Include="Views\WishListItem\" />
     <Folder Include="Views\WishList\" />

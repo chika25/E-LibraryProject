@@ -4,55 +4,49 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2 class="mt-3">Details</h2>
 
-<div>
-    <h4>Book</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Category.CategoryName)
-        </dt>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 
-        <dd>
-            @Html.DisplayFor(model => model.Category.CategoryName)
-        </dd>
+<div class="container mt-4">
+    <div class="card shadow-sm rounded">
+        <div class="row g-0">
+            @if (!string.IsNullOrEmpty(Model.Photo))
+            {
+                <div class="col-md-4 text-center p-3">
+                    <img src="~/Images/@Model.Photo" alt="Book Photo" class="img-fluid rounded" style="max-height: 200px;" />
+                </div>
+            }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3 class="card-title">@Model.Title</h3>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Category:</strong> @Model.Category.CategoryName
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Author:</strong> @Model.Author
+                        </li>
+                        <li class="list-group-item">
+                            <strong>ISBN:</strong> @Model.ISBN
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Published Year:</strong> @Model.PublicationYear
+                        </li>
+                    </ul>
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Author)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ISBN)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ISBN)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PublicationYear)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PublicationYear)
-        </dd>
-
-    </dl>
+                    <div class="mt-4">
+                        @Html.ActionLink("Back to Wishlist", "Index", "WishLists", null, new { @class = "btn btn-outline-secondary" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<p>
-<p>
-    @Html.ActionLink("Back to List", "Index", "WishLists", null)  
-</p>

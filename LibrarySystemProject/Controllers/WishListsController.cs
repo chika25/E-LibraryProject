@@ -115,8 +115,9 @@ namespace LibrarySystemProject.Controllers
                 // Add the WishListItem entry
                 db.WishListItem.Add(wishListItem);
                 db.SaveChanges();
-
-                return RedirectToAction("Index", new { userId = userId });
+                TempData["Message"] = "Book added to wishlist!";
+                return Redirect(Request.UrlReferrer.ToString());
+                //return RedirectToAction("Index", new { userId = userId });
             }
 
             // Reload books list for dropdown in case of validation errors
