@@ -3,48 +3,53 @@
 }
 
 <main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        @if (Session["Firstname"] != null)
-        {
-            <h2>Hello, @Session["Firstname"].</h2>
-        }
-        
-        <h1 id="title">Welcome to Readly</h1>
-        <p class="lead">Your one-stop solution for managing books, categories, and rental history.</p>
+    <section class="hero-section text-center text-white py-5">
+        <div class="container">
+            @if (Session["Firstname"] != null)
+            {
+                <h2>Hello, @Session["Firstname"]</h2>
+            }
+            <h1 class="display-4">Welcome to Readly</h1>
+            <p class="lead">Your one-stop solution for managing books, categories, and rental history.</p>
+        </div>
     </section>
 
-    <div class="row">
-        <!-- ActionLink to Categories Index -->
-        <section class="col-md-3" aria-labelledby="categoriesTitle">
-            <h2 id="categoriesTitle">Categories</h2>
-            <p>Browse different categories of books.</p>
-            <p>@Html.ActionLink("View Categories", "Index", "Categories", null, new { @class = "btn btn-primary btn-md" })</p>
-        </section>
+    <section class="container py-5">
+        <div class="row text-center">
+            <!-- Categories -->
+            <div class="col-md-3 mb-4">
+                <img src="~/Content/image/categories.jpg" alt="Categories" class="img-fluid rounded mb-3 home-card-img">
+                <h3>Categories</h3>
+                <p>Browse different categories of books.</p>
+                <p>@Html.ActionLink("View Categories", "Index", "Categories", null, new { @class = "btn btn-primary" })</p>
+            </div>
 
-        <!-- ActionLink to Books Index -->
-        <section class="col-md-3" aria-labelledby="booksTitle">
-            <h2 id="booksTitle">Books</h2>
-            <p>Explore the list of available books in the library.</p>
-            <p>@Html.ActionLink("View Books", "Index", "Books", null, new { @class = "btn btn-primary btn-md" })</p>
-        </section>
+            <!-- Books -->
+            <div class="col-md-3 mb-4">
+                <img src="~/Content/image/books.jpg" alt="Books" class="img-fluid rounded mb-3 home-card-img">
+                <h3>Books</h3>
+                <p>Explore the list of available books in the library.</p>
+                <p>@Html.ActionLink("View Books", "Index", "Books", null, new { @class = "btn btn-primary" })</p>
+            </div>
 
+            @if (!User.IsInRole("Admin"))
+            {
+                <!-- Wishlist -->
+                <div class="col-md-3 mb-4">
+                    <img src="~/Content/image/wishlist.jpg" alt="Wishlist" class="img-fluid rounded mb-3 home-card-img">
+                    <h3>Wishlist</h3>
+                    <p>Manage your personal book wishlist.</p>
+                    <p>@Html.ActionLink("View Wishlist", "Index", "WishLists", null, new { @class = "btn btn-primary" })</p>
+                </div>
 
-        @if (! User.IsInRole("Admin"))
-        {
-            <!-- ActionLink to WishList Index -->
-            <section class="col-md-3" aria-labelledby="wishListTitle">
-                <h2 id="wishListTitle">Wishlist</h2>
-                <p>Manage your personal book wishlist.</p>
-                <p>@Html.ActionLink("View Wishlist", "Index", "WishLists", null, new { @class = "btn btn-primary btn-md" })</p>
-
-            </section>
-
-            <!-- ActionLink to RentalHistoryList Index -->
-            <section class="col-md-3" aria-labelledby="rentalHistoryTitle">
-                <h2 id="rentalHistoryTitle">Rental History</h2>
-                <p>View your rental history.</p>
-                <p>@Html.ActionLink("View Rental History", "Index", "RentalHistoryLists", new { userId = 1 }, new { @class = "btn btn-primary btn-md" })</p>
-            </section>
-        }
+                <!-- Rental History -->
+                <div class="col-md-3 mb-4">
+                    <img src="~/Content/image/rental.jpg" alt="Rental History" class="img-fluid rounded mb-3 home-card-img">
+                    <h3>Rental History</h3>
+                    <p>View your rental history.</p>
+                    <p>@Html.ActionLink("View Rental History", "Index", "RentalHistoryLists", new { userId = 1 }, new { @class = "btn btn-primary" })</p>
+                </div>
+            }
         </div>
+    </section>
 </main>
