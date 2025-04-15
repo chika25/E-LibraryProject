@@ -12,6 +12,7 @@
     </div>
 }
 
+<div id="container">
 
 <table class="table">
     <tr>
@@ -64,5 +65,68 @@
             </td>
         </tr>
     }
-</table>
+</div>
 <p>@Html.ActionLink("Go Back to Home", "Index", "Home")</p>
+
+
+
+<style>
+    /* Container styles */
+    #container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    /* Category container styling */
+    .category-container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 30%;
+        text-align: center;
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        /* Hover effect for category container */
+        .category-container:hover {
+            transform: translateY(-5px); /* Slight lift effect */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Image styling */
+    .category-photo {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        max-height: 150px; /* Adjust based on your design */
+        object-fit: cover;
+        margin-bottom: 15px;
+    }
+
+    /* Category info (links and text) */
+    .category-info h3 {
+        font-size: 1.2em;
+        font-weight: bold;
+        text-decoration: none;
+        color: black;
+        margin-bottom: 10px;
+    }
+
+    .category-actions {
+        font-size: 0.9em;
+        color: black;
+    }
+
+        .category-actions a, .category-info h3 a, #create a {
+            text-decoration: none;
+            color: black;
+        }
+
+            .category-actions a:hover, .category-info h3 a:hover, #create a:hover {
+                text-decoration: underline;
+            }
+</style>
