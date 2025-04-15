@@ -20,6 +20,8 @@
         <th>@Html.DisplayNameFor(model => model.Book.Author)</th>
         <th>@Html.DisplayNameFor(model => model.Book.ISBN)</th>
         <th>@Html.DisplayNameFor(model => model.Book.PublicationYear)</th>
+        <th>Start Date</th>
+        <th>End Date</th>
         <th></th>
     </tr>
 
@@ -31,6 +33,16 @@
             <td>@Html.DisplayFor(modelItem => item.Book.Author)</td>
             <td>@Html.DisplayFor(modelItem => item.Book.ISBN)</td>
             <td>@Html.DisplayFor(modelItem => item.Book.PublicationYear)</td>
+            <td>
+                @if (item.EndDate != null)
+                {
+                    @item.EndDate.Value.ToShortDateString()
+                }
+                else
+                {
+                    <span style="color: orange;">Active</span>
+                }
+            </td>
             <td>
                 @Html.ActionLink("Details", "Details", "RentalHistoryLists", new { id = item.BookID }, null)
 
@@ -46,7 +58,7 @@
                 else
                 {
                     <div style="margin-left: 10px; color: green;">
-                        Returned on @item.EndDate.Value.ToShortDateString()
+                        Should be auto Returned on @item.EndDate.Value.ToShortDateString()
                     </div>
                 }
             </td>

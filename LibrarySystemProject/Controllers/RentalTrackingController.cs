@@ -13,7 +13,7 @@ namespace LibrarySystemProject.Controllers
         // GET: RentalTracking
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RentBook(int bookId)
+        public ActionResult RentBook(int bookId, DateTime StartDate, DateTime EndDate)
         {
             if (Session["UserID"] == null)
             {
@@ -38,14 +38,14 @@ namespace LibrarySystemProject.Controllers
             {
                 UserID = userId,
                 BookID = bookId,
-                StartDate = DateTime.Now,
-                EndDate = null // Not returned yet
+                StartDate = StartDate,
+                EndDate = EndDate // custom date
             };
 
             db.RentalTracking.Add(rental);
             db.SaveChanges();
 
-            TempData["Message"] = "Book rented successfully!";
+            TempData["Message"] = $"Book rented from {StartDate.ToShortDateString()} to {EndDate.ToShortDateString()}";
             return RedirectToAction("Details", "Books", new { id = bookId });
             //return RedirectToAction("Index", "RentalHistoryLists");
         }

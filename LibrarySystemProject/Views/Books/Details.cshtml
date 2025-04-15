@@ -46,7 +46,18 @@
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.Hidden("bookId", Model.BookID)
-                                <button type="submit" class="btn btn-primary">📖 Rent this Book</button>
+
+                                <div>
+                                    <label for="StartDate">Start Date:</label>
+                                    <input type="date" name="StartDate" required />
+                                </div>
+
+                                <div style="margin-top: 10px;">
+                                    <label for="EndDate">End Date:</label>
+                                    <input type="date" name="EndDate" required />
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Rent this Book</button>
                             }
                         }
 
