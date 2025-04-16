@@ -47,19 +47,22 @@
             <td>
                 @Html.ActionLink("Details", "Details", "RentalHistoryLists", new { id = item.BookID }, null)
 
-                @if (item.EndDate == null)
+                @if (item.EndDate > DateTime.Today)
                 {
                     using (Html.BeginForm("ReturnBook", "RentalTracking", FormMethod.Post, new { style = "display:inline-block; margin-left: 10px;" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.Hidden("rentalId", item.RentalID)
-                        <button type="submit" class="btn btn-warning btn-sm">Return Book</button>
+                        <button type="submit" class="btn btn-warning btn-sm">Return Book Early</button>
                     }
+                    <div style="margin-left: 10px; color: green;">
+                        Should be auto Returned on @item.EndDate.Value.ToShortDateString()
+                    </div>
                 }
                 else
                 {
                     <div style="margin-left: 10px; color: green;">
-                        Should be auto Returned on @item.EndDate.Value.ToShortDateString()
+                        Returned on @item.EndDate.Value.ToShortDateString()
                     </div>
                 }
             </td>

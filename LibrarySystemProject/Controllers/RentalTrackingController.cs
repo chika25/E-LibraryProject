@@ -25,8 +25,7 @@ namespace LibrarySystemProject.Controllers
             // Prevent duplicate rentals for the same book if it's not returned yet
             bool alreadyRented = db.RentalTracking.Any(r =>
                 r.UserID == userId &&
-                r.BookID == bookId &&
-                r.EndDate == null);
+                r.BookID == bookId);
 
             if (alreadyRented)
             {
@@ -56,16 +55,13 @@ namespace LibrarySystemProject.Controllers
         {
             var rental = db.RentalTracking.FirstOrDefault(r => r.RentalID == rentalId);
 
-            if (rental == null || rental.EndDate != null)
+            if (rental.EndDate > DateTime.Now)
             {
-                TempData["Message"] = "This book is already returned or rental not found.";
-                return RedirectToAction("Index", "RentalHistoryLists");
+                rental.EndDate = DateTime.Now;
+                db.SaveChanges();
+
+                TempData["Message"] = "Book returned successfully!";
             }
-
-            rental.EndDate = DateTime.Now;
-            db.SaveChanges();
-
-            TempData["Message"] = "Book returned successfully!";
             return RedirectToAction("Index", "RentalHistoryLists");
         }
 
